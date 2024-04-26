@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Module defines API endpoints for checking the API
+status and retrieving object type statistics.
+"""
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
