@@ -11,23 +11,18 @@ from models.state import State
 @app_views.route("/states", methods=["GET"])
 def get_states():
     """Returns a list of all State objects"""
-    states = []
-    for v in storage.all("State").values():
-        states.append(v.to_dict())
-    return (jsonify(states))
+    all_states = storage.all(State).values()
+    states_list = [state.to_dict() for state in all_states]
+    return jsonify(states_list)
 
 
 @app_views.route("/states/<state_id>", methods=["GET"])
 def get_state(state_id):
     """Returns a State object by ID"""
-    if state_id is None:
-        states = storage.all("State")
-        get_state = [value.to_dict() for key, value in states.items()]
-        return (jsonify(get_state))
-    get_state = storage.get("State", state_id)
-    if get_state is not None:
-        return (jsonify(get_state.to_dict()))
-    abort(404)
+    state = storage.get(State, state_id)
+    if state is None:
+        abort(404)
+    return jsonify(state.to_dict())
 
 
 @app_views.route("/states/<state_id>", methods=["DELETE"])
