@@ -3,19 +3,21 @@
 Creates and runs a Flask web application for a RESTful API.
 """
 from flask import Flask, jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
 from os import getenv
 
-
 app = Flask(__name__)
+CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
 app.register_blueprint(app_views)
 
 
 @app.errorhandler(404)
 def not_found(error):
     """Return a JSON-formatted 404 response"""
-    return (jsonify({"error": "Not found"}), 404)
+    return jsonify({"error": "Not found"}), 404
 
 
 @app.teardown_appcontext
