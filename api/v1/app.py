@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
-creating blueprint for flask
+Creates and runs a Flask web application for a RESTful API.
 """
-from flask import Flask, Blueprint,  make_response, jsonify
-from models import storage
-import os
+from flask import Flask, jsonify, make_response, Blueprint
 from flask_cors import CORS
+from models import storage
 from api.v1.views import app_views
+from os import getenv
 
 
 app = Flask(__name__)
@@ -31,6 +31,6 @@ def page_not_found(error):
 
 
 if __name__ == "__main__":
-    hosts = os.getenv("HBNB_API_HOST", default='0.0.0.0')
+    hosts = getenv("HBNB_API_HOST", default='0.0.0.0')
     ports = int(os.getenv("HBNB_API_PORT", default=5000))
     app.run(host=hosts, port=ports, threaded=True)
