@@ -116,6 +116,7 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
+        """Tests retrieving an object by ID with FileStorage."""
         storage = FileStorage()
         storage.reload()
 
@@ -132,6 +133,7 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
+        """Tests the count of objects in FileStorage."""
         storage = FileStorage()
         storage.reload()
 
@@ -141,11 +143,11 @@ class TestFileStorage(unittest.TestCase):
 
         city_data = {"name": "Eldore", "state_id": state_instance.id}
         city_instance = City(**city_data)
-        storage.new(city_data)
+        storage.new(city_instance)
         storage.save()
 
         state_occurrence = storage.count(State)
         self.assertEqual(state_occurrence, len(storage.all(State)))
 
-        all_occurrence = storage.count(State)
-        self.assertEqual(all_occurrence, len(storage.all))
+        all_occurrence = storage.count()
+        self.assertEqual(all_occurrence, len(storage.all()))
