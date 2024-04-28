@@ -16,7 +16,8 @@ def get_states():
     return jsonify(states_list)
 
 
-@app_views.route("/states/<state_id>", strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["GET"],
+                 strict_slashes=False)
 def get_state(state_id):
     """Returns a State object by ID"""
     state = storage.get(State, state_id)
@@ -26,7 +27,8 @@ def get_state(state_id):
         return abort(404)
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_state(state_id):
     """Deletes a State object by ID"""
     state = storage.get(State, state_id)
@@ -55,18 +57,25 @@ def create_state():
     return jsonify(new_state.to_dict()), 200
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
+@app_views.route("/states/<state_id>", methods=["PUT"],
+                 strict_slashes=False)
 def update_state(state_id):
     """Updates a State object by ID"""
+    if request.content_type != "application/json":
+        return abort(400, "Not a JSON")
+
     state = storage.get(State, state_id)
-    if state is None:
-        abort(404)
-    if not request.json:
-        abort(400, "Not a JSON")
-    state_data = request.json
-    ignore_keys = ["id", "created_at", "updated_at"]
-    for key, value in state_data.items():
-        if key not in ignore_keys:
-            setattr(state, key, value)
-    storage.save()
-    return jsonify(state.to_dict())
+
+    if state:
+        if not request.get_json():
+            return abort(400, "Not a JSON")
+        data = request.get_json
+        ignore_keys = ["id", "created_at", "updated_at"]
+
+        for key, value in data.items():
+            if key not in ignore_keys:
+                setattr(state, key, value)
+        state.save()
+        return jsonify(state.to_dict()), 200
+    else:
+        return abort(404)
