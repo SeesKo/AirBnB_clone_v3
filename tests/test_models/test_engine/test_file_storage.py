@@ -113,3 +113,47 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+
+class TestFileStorageGetCount(unittest.TestCase):
+    """Tests for get() and count() methods in FileStorage"""
+    @classmethod
+    def setUpClass(cls):
+        """Setup for test cases"""
+        cls.storage = FileStorage()
+        cls.storage.reload()
+
+    def test_get_existing_user(self):
+        """Test get() for an existing User"""
+        user = User(email="test@example.com", password="password")
+        self.storage.new(user)
+        self.storage.save()
+        retrieved_user = self.storage.get(User, user.id)
+        self.assertEqual(
+            user.id, retrieved_user.id,
+            "get() should retrieve the correct User"
+        )
+
+    def test_get_non_existing_user(self):
+        """Test get() for a non-existing User"""
+        retrieved_user = self.storage.get(User, "non_existing_id")
+        self.assertIsNone(
+            retrieved_user,
+            "get() should return None for a non-existing User"
+        )
+
+    def test_count_all(self):
+        """Test count() for all objects"""
+        initial_count = self.storage.count()
+        self.assertGreaterEqual(
+            initial_count, 0,
+            "count() should be at least 0"
+        )
+
+    def test_count_by_class(self):
+        """Test count() for a specific class"""
+        state_count = self.storage.count(State)
+        self.assertGreaterEqual(
+            state_count, 0,
+            "count() should be at least 0 for State class"
+        )
