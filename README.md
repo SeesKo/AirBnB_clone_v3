@@ -71,4 +71,4 @@ Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://tw
 - Third part of Airbnb: Erick Siiko
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+All Rights Reserved.
