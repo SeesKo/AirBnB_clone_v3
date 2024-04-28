@@ -2,15 +2,17 @@
 """
 API endpoints for managing 'Place' objects in a RESTful manner.
 """
-from api.v1.views import app_views
 from flask import jsonify, request, abort
+from api.v1.views import app_views
 from models import storage
 from models.place import Place
+from models.state import State
 from models.city import City
-from models.user import User
+from models.amenity import Amenity
 
 
-@app_views.route("/cities/<city_id>/places", methods=["GET"])
+@app_views.route("/cities/<city_id>/places", methods=["GET"],
+                 strict_slashes=False)
 def get_places(city_id):
     """Returns a list of all Place objects for a given City"""
     city = storage.get(City, city_id)
@@ -20,7 +22,8 @@ def get_places(city_id):
     return jsonify([place.to_dict() for place in places])
 
 
-@app_views.route("/places/<place_id>", methods=["GET"])
+@app_views.route("/places/<place_id>", methods=["GET"],
+                 strict_slashes=False)
 def get_place(place_id):
     """Returns a Place object by ID"""
     place = storage.get(Place, place_id)
@@ -29,7 +32,8 @@ def get_place(place_id):
     return jsonify(place.to_dict())
 
 
-@app_views.route("/places/<place_id>", methods=["DELETE"])
+@app_views.route("/places/<place_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def delete_place(place_id):
     """Deletes a Place object by ID"""
     place = storage.get(Place, place_id)
@@ -42,7 +46,8 @@ def delete_place(place_id):
     return jsonify({}), 200
 
 
-@app_views.route("/cities/<city_id>/places", methods=["POST"])
+@app_views.route("/cities/<city_id>/places", methods=["POST"],
+                 strict_slashes=False)
 def create_place(city_id):
     """Creates a new Place for a given City"""
     city = storage.get(City, city_id)
@@ -73,7 +78,8 @@ def create_place(city_id):
     return jsonify(new_place.to_dict()), 201
 
 
-@app_views.route("/places/<place_id>", methods=["PUT"])
+@app_views.route("/places/<place_id>", methods=["PUT"],
+                 strict_slashes=False)
 def update_place(place_id):
     """Updates a Place object by ID"""
     place = storage.get(Place, place_id)
@@ -91,3 +97,49 @@ def update_place(place_id):
 
     storage.save()
     return jsonify(place.to_dict()), 200
+
+
+@app_views.route("/places_search", methods=["POST"],
+                 strict_slashes=False)
+def search_places():
+    """
+    Searches for Place objects based on states, cities, or amenities
+    """
+    request_data = request.get_json()
+    if request_data is None:
+        abort(400, "Not a JSON")
+
+    state_ids = request_data.get("states", [])
+    city_ids = request_data.get("cities", [])
+    amenity_ids = request_data.get("amenities", [])
+
+    if not state_ids and not city_ids and not amenity_ids:
+        places = storage.all(Place).values()
+        return jsonify([place.to_dict() for place in places])
+
+    place_results = set()
+
+    for state_id in state_ids:
+        state = storage.get(State, state_id)
+        if state is None:
+            continue
+        for city in state.cities:
+            place_results.update(city.places)
+
+    for city_id in city_ids:
+        city = storage.get(City, city_id)
+        if city is None:
+            continue
+        place_results.update(city.places)
+
+    if amenity_ids:
+        filtered_results = set()
+        for place in place_results:
+            if all(
+                amenity.id in [a.id for a in place.amenities]
+                for amenity in amenity_ids
+            ):
+                filtered_results.add(place)
+        place_results = filtered_results
+
+    return jsonify([place.to_dict() for place in place_results])
