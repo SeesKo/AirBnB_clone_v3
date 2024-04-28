@@ -72,30 +72,30 @@ class DBStorage:
         self.__session = Session
 
     def get(self, cls, id):
-        """Retrieves an object by class and ID"""
+        """Retrieves an object by class and ID."""
         if cls and id:
             if cls in classes.values() and isinstance(id, str):
                 all_objects = self.all(cls)
-                for key, value in all_objects.items():
+                for key, obj in all_objects.items():
                     if key.split('.')[1] == id:
-                        return value
-            else:
-                return None
-        return None
+                        return obj
+            return
+        return
 
     def count(self, cls=None):
         """
-        Counts the number of objects in the database, optionally by class
+        Counts the number of objects in the database, optionally by class.
         """
         if not cls:
-            inst_of_all_cls = self.all()
-            return len(inst_of_all_cls)
-        for clas, value in classes.items():
-            if cls == clas or cls == value:
-                all_inst_of_prov_cls = self.all(cls)
-                return len(all_inst_of_prov_cls)
-        if cls not in classes.values:
-            return
+            all_objects = self.all()
+            return len(all_objects)
+
+        for class_name, class_value in classes.items():
+            if cls == class_name or cls == class_value:
+                specific_objects = self.all(cls)
+                return len(specific_objects)
+
+        return
 
     def close(self):
         """call remove() method on the private session attribute"""

@@ -66,29 +66,29 @@ class FileStorage:
                 del self.__objects[key]
 
     def get(self, cls, id):
-        """Retrieves an object by class and ID"""
+        """Retrieves an object by class and ID."""
         if cls and id:
             if cls in classes.values():
                 all_objects = self.all(cls)
-
-                for value in all_objects.values():
-                    if value.id == id:
-                        return value
-            return None
-
-        return None
+                for item in all_objects.values():
+                    if item.id == id:
+                        return item
+            return
+        return
 
     def count(self, cls=None):
         """
-        Counts the number of objects in the database, optionally by class
+        Counts the number of objects in the storage, optionally by class.
         """
         if not cls:
-            inst_of_all_cls = self.all()
-            return len(inst_of_all_cls)
+            all_objects = self.all()
+            return len(all_objects)
+
         if cls in classes.values():
-            all_inst_of_prov_cls = self.all(cls)
-            return len(all_inst_of_prov_cls)
-        if cls not in classes.values:
+            specific_objects = self.all(cls)
+            return len(specific_objects)
+
+        if cls not in classes.values():
             return
 
     def close(self):
