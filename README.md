@@ -67,8 +67,10 @@ No known bugs at this time.
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
 
-- Second part of Airbnb: Joann Vuong
-- Third part of Airbnb: Erick Siiko
+- Second part of this Airbnb Clone: Joann Vuong
+- Third part of this Airbnb Clone: Erick Siiko
 
 ## License
-All Rights Reserved.
+This project is licensed under the terms of the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.html). You can redistribute it and/or modify it under the terms of the AGPLv3.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. For more details, see the [full text of the license](https://www.gnu.org/licenses/agpl-3.0.html).
