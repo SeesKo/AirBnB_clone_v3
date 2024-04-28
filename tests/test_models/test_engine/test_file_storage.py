@@ -117,9 +117,7 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         """Tests retrieving an object by ID with FileStorage."""
-        pass
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Tests the count of objects in FileStorage."""
-        pass
