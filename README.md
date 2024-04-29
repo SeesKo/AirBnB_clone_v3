@@ -10,10 +10,9 @@ This is the third segment of the AirBnB project at Holberton School that will co
 * Destroys an object.
 
 ## Table of Contents
-* [Environment](#environment)
+* [Project Requirements](#project-requirements)
 * [Installation](#installation)
 * [File Descriptions](#file-descriptions)
-* [Usage](#usage)
 * [Examples of use](#examples-of-use)
 * [Bugs](#bugs)
 * [Authors](#authors)
@@ -36,6 +35,24 @@ This is the third segment of the AirBnB project at Holberton School that will co
 
 - All tests should be executed by using this command: `python3 -m unittest discover tests`.
 - Individual test files can also be tested by using this command: `python3 -m unittest tests/test_models/test_base_model.py`.
+
+## Installation
+* Clone this repository: `git clone "https://github.com/alexaorrico/AirBnB_clone.git"`
+* Access AirBnb directory: `cd AirBnB_clone`
+* Run hbnb(interactively): `./console` and enter command
+* Run hbnb(non-interactively): `echo "<command>" | ./console.py`
+
+## File Descriptions
+[console.py](console.py) - the console contains the entry point of the command interpreter. 
+List of commands this console current supports:
+* `EOF` - exits console 
+* `quit` - exits console
+* `<emptyline>` - overwrites default emptyline method and does nothing
+* `create` - Creates a new instance of`BaseModel`, saves it (to the JSON file) and prints the id
+* `destroy` - Deletes an instance based on the class name and id (save the change into the JSON file). 
+* `show` - Prints the string representation of an instance based on the class name and id.
+* `all` - Prints all string representation of all instances based or not on the class name. 
+* `update` - Updates an instance based on the class name and id by adding or updating attribute (save the change into the JSON file).
 
 ## Examples of use
 ```
